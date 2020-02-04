@@ -7,7 +7,7 @@ with open('data/yellow_tripdata_2019-01.csv', mode='r') as csv_file:
 
     for row in csv_reader:
         #     print(str(row["PULocationID"]) + " " + str(row["DOLocationID"]) + " " + str(row["passenger_count"]))
-        if (row["PULocationID"] == 138 or row["DOLocationID"] == 138):
+        if (int(row["PULocationID"]) == 138 or int(row["DOLocationID"]) == 138):
         	valid_trips.append(row)
 
         line_count += 1
