@@ -2,7 +2,7 @@ import csv
 
 valid_trips = []
 
-with open('data/yellow_tripdata_2019-01.csv', mode='r') as csv_file:
+with open('rawdata/yellow_tripdata_2019-01.csv', mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     line_count = 0
 
@@ -14,9 +14,9 @@ with open('data/yellow_tripdata_2019-01.csv', mode='r') as csv_file:
     print('Processed ' + str(line_count) + ' lines.')    
     print('Kept ' + str(len(valid_trips)) + ' lines.')
 
-    keys = valid_trips[0].keys()
 
-with open('data/clean.csv', 'wb') as output_file:
+keys = valid_trips[0].keys()
+with open('data/yellow_tripdata_2019-01_LGA.csv', 'wb') as output_file:
     dict_writer = csv.DictWriter(output_file, keys)
     dict_writer.writeheader()
     dict_writer.writerows(valid_trips)
