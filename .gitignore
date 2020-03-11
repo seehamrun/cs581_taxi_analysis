@@ -1,7 +1,11 @@
+# dont check in the raw yellowtrip data
+yellow_tripdata*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+.DS_Store
 
 # C extensions
 *.so
