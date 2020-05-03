@@ -1,0 +1,13 @@
+\section{Assumptions \& Restrictions}
+\label{sec:assumptions}
+The introduced methodology involves several assumptions and restrictions which allows a focus on the data handling and algorithmic components of the problem.  First, as previously mentioned, the solution strictly handles trips going to or from the LaGuardia Airport. 
+To apply the algorithm in our data, we set the following:
+\begin{enumerate}
+\item All pick ups and drop offs within a one mile radius of the airports coordinates will be considered airport trips.  
+\item Trips that have an exceptionally long distance or have a distance of zero, are  removed from the dataset.
+\item We  filter out trips that have more than one passenger.   On the dimension of total passengers, every trip can be merged with every other trip.
+\item  The passenger is not expected to walk any significant distance to reach their pick up or drop off location.
+\item The social preferences of the passengers (non-smoking, similar interests, etc) are also not considered.  
+\item Traffic is not considered- the travel time is assumed to be constant.  
+\end{enumerate}
+

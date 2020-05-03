@@ -1,0 +1,56 @@
+\documentclass[pdflatex,11pt]{article}
+
+
+\usepackage{latexsym}
+\usepackage{times}
+%\usepackage{helvet}
+%\usepackage{courier}
+\usepackage{graphicx} % to include figures
+\usepackage{wrapfig} % to have text wrap around figures
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{draft}
+\usepackage[ruled,vlined]{algorithm2e}
+
+\usepackage{url}
+\usepackage[shortlabels]{enumitem}
+\usepackage{aaai-named}
+\usepackage{authblk}
+\usepackage{hyperref}
+\newcommand*{\email}[1]{%
+    \normalsize\href{mailto:#1}{#1}\par
+    }
+
+\input{simplemargins.sty}
+
+\setleftmargin{1in}
+\setrightmargin{1in}
+\settopmargin{1in}
+\setbottommargin{1in}
+
+
+\title{CS581 Ride Sharing Project \\Final Report}
+\author[1]{Siham Husein}
+\author[1]{Kostas Solomos}
+\author[1]{Michael Uhlarik}
+\author[1]{Hoangminh Huynhnhuyen}
+\affil[1]{Department of Computer Science, University of Illinois at Chicago }
+
+\renewcommand\Authands{ and }
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\input{introduction}
+\input{assumptions}
+\input{algorithms}
+\input{experiments}
+
+
+
+
+\bibliographystyle{acm}
+\bibliography{paper}
+
+
+\end{document}

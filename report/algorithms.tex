@@ -1,0 +1,140 @@
+\section{Algorithms}
+\label{sec:algorithms}
+
+\subsection{Overview}
+The algorithm that is used to merge trips is the foundation of this solution. 
+Once the assumptions and restrictions are in place and the data is cleaned and processed the merging process begins.  
+First, the delay tolerance and pool size are specified.  The delay tolerances represents that maximum addition to the total trip time of the passenger that is acceptable in a shared ride.  The pool size is the time window during which the trips will be merged.  For example, if the pool size is set to 5 minutes, then the only trips that can possibly be merged are trips that fall within the given 5 minute window.  
+
+
+\textbf{Distance Formula}
+The distance between two drop off or pick up locations is calculated by the following by the  Euclidean distance i using the coordinates given in the dataset.  
+Considering now a set of pairs \texttt{(p,q)}
+The mathematical equation that computes their distance is:  
+ $d\left( p,q\right)   = \sqrt {\sum _{i=1}^{n}  \left( q_{i}-p_{i}\right)^2 } $
+The distance is multiplied by a constant which represents the ratio between the Euclidean distance and the trip distance value from the dataset.  
+This result is used as an approximation of real orld travel distance.  
+The speed is assumed to be the average of the two trip speeds.  
+
+\textbf{Shareable Trips}.
+Two trips are considered to be shareable if they meet the following criteria:
+If the trip time from the source location to passenger A’s location plus the distance from passenger A's location to passenger B's location is less than the trip time from the source to passenger B's location plus passenger B’s tolerable delay, then those trips are shareable.  
+This formula holds whether passenger A is dropped off first or passenger B is dropped off first, as well as if this is going to or coming from LaGuardia.
+
+\subsection{Algorithms in Depth}
+Here we present the pseudocode and details of our proposed algorithms.	
+To be consistent  we set the following variables : 
+\begin{enumerate}
+\item LGA is denoted as H.
+\item The average speed of each trip is calculated in advance:  Speed = $ distance \div (dropoff\_time-pickup\_time)$.
+\item Delay  ranges between 5,10,15,20 \% of total time.\\
+
+\end{enumerate}
+
+
+
+\begin{algorithm}[H]
+
+\SetAlgoLined
+
+\KwResult{Average of distance saving, Trip saving and computation times.}
+
+ Trips\_Array,Distance\_Array,Computation\_Array=New\_Array(); //init  empty arrays for storing\\
+ Pools\_Set= Data\_Slice(window) // divide all trips into windows of x minutes\\
+ \For {pool in Pools\_Set}{
+	start\_time=current\_time();\\
+	 G = New\_Graph();\\
+	 G=add\_trips(all);//Add all trips into nodes of graph G\\
+
+	 \For{ each (tripA,tripB) in pool}{ /	/For each pair of trips in this pool\\
+	 		dist(A\_B)= Euclidean(A,B); //Calculate the travel distance of  2 drop-off points\\
+	 		dist(H\_A)= Euclidean(H,A) ;// Calculate distance between LGA(H) and A\\
+	 		dist(H\_B)= Euclidean(H,B) ;// Calculate distance between LGA(H) and B\\
+	 		//check for savings formula.  \\
+	 		\If { dist(A\_B) $\le$ dist(H\_A) OR  dist(A\_B) $\le$ dist(H\_B) }{
+	 			delay\_A =t(HA)*X\% ;// calculate delay tolerance in time unit for each trip.\\
+	 				delay\_B =t(HB) *X\% ;\\ 
+					V (AB)= Avg(V (HA) + V (HB));// Calculate average speed to go from A to  B\\
+					t(AB) = d(AB) \/ V (AB) ; //Calculate time to travel between A and B\\
+					\textbf{\\Check if 2 trips are shareable\\}
+					\If{ t(HA) + t(AB) $\leq$ t(HB) + delay\_B OR  t(HB) + t(AB) $\leq$t(HA) + delay\_A}{
+					saving=MAX (dist(H\_B)- dist(A\_B),dist(H\_A)- dist(A\_B)) ;\\
+					G.add\_edge(H,A,B,saving) ; //add an edge with weight  saving to graph G\\
+					
+					}
+
+	 		
+	 		}
+
+	 		Max\_Set= 	Max\_Matching(G) ;// maximum weight matching algorithm on graph G to get matching set M\\
+	 		end\_time=current\_time();
+	 		total\_saving,total\_distance =compute(Max\_Set) ;// Calculate the total distance savings and alll trips of set .\\
+	 		computation\_time=end\_time-start\_time ;
+		Trips\_Array,Distance\_Array,Computation\_Array= total\_saving, total\_distance, computation\_time; //store in arrays;\\
+
+
+	
+	 	
+	 	
+	 }
+	\texttt{Calculate the average of distance saving, trip saving and compute time arrays}
+
+ }
+ \caption{Algorithm to combine trips starting from LGA}
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+
+\SetAlgoLined
+
+\KwResult{Average of distance saving, Trip saving and computation times.}
+
+ Trips\_Array,Distance\_Array,Computation\_Array=New\_Array(); //init  empty arrays for storing\\
+ Pools\_Set= Data\_Slice(window) // divide all trips into windows of x minutes\\
+ \For {pool in Pools\_Set}{
+	start\_time=current\_time();\\
+	 G = New\_Graph();\\
+	 G=add\_trips(all);//Add all trips into nodes of graph G\\
+
+	 \For{ each (tripA,tripB) in pool}{ /	/For each pair of trips in this pool\\
+	 		dist(A\_B)= Euclidean(A,B); //Calculate the travel distance of  2 drop-off points\\
+	 		dist(H\_A)= Euclidean(H,A) ;// Calculate distance between LGA(H) and A\\
+	 		dist(H\_B)= Euclidean(H,B) ;// Calculate distance between LGA(H) and B\\
+	 		//check for savings formula.  \\
+	 		\If { dist(A\_B) $\le$ dist(H\_A) OR  dist(A\_B) $\le$ dist(H\_B) }{
+	 			delay\_A =t(HA)*X\% ;// calculate delay tolerance in time unit for each trip.\\
+	 				delay\_B =t(HB) *X\% ;\\ 
+					V (AB)= Avg(V (HA) + V (HB));// Calculate average speed to go from A to  B\\
+					t(AB) = d(AB) \/ V (AB) ; //Calculate time to travel between A and B\\
+					\texttt{//Check which trip started before the other and reverse the order}\\
+					delta = pickup\_timeB - pickup\_timeA\\
+
+			
+					\textbf{\\Check if 2 trips are shareable\\}
+					\If{ t(AB) $\leq$ delta + delay\_B OR  t(HB) + t(AB) $\leq$t(HA) + delay\_A}{
+					saving= dist(H\_B)- dist(A\_B) ;\\
+					G.add\_edge(H,A,B,saving) ; //add an edge with weight  saving to graph G\\
+					
+					}
+
+	 		
+	 		}
+
+	 		Max\_Set= 	Max\_Matching(G) ;// maximum weight matching algorithm on graph G to get matching set M\\
+	 		end\_time=current\_time();
+	 		total\_saving,total\_distance =compute(Max\_Set) ;// Calculate the total distance savings and alll trips of set .\\
+	 		computation\_time=end\_time-start\_time ;
+		Trips\_Array,Distance\_Array,Computation\_Array= total\_saving, total\_distance, computation\_time; //store in arrays;\\
+
+
+	
+	 	
+	 	
+	 }
+	\texttt{Calculate the average of distance saving, trip saving and compute time arrays}
+
+ }
+ \caption{Algorithm to combine trips ending to   LGA}
+\end{algorithm}
+
